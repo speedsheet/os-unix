@@ -1,8 +1,4 @@
-# <#>Unix<><> SpeedSheet
-<b>Find what you need, faster.<>
-
-Covers Unix command line commands.
-
+# Linux Commands
 
 
 # Files
@@ -56,41 +52,6 @@ All		No Access			0<>
 Mode:
 
 <cb>550<>
-
-
-
-# Exit Codes
-
-
-
-### OK
-
-OK Exit Code:
-
-<cb>0<>
-@
-@ 0
-
-
-
-### Error
-
-Recommended Error Exit Codes:
-
-<cb>1-127<>
-
-General Error Code:
-
-<cb>1<>
-
-Invalid Command Line Options Error Code:
-
-<cb>2<>
-
-
-These arr guideline more than rule.
-@
-@ 1, 2
 
 
 
@@ -200,13 +161,480 @@ Log Directories:
 
 
 
+# Services / init.d / rc
+@
+@ initd
+
+
+
+### init.d - Service - Start
+
+<cb>/etc/init.d/<v>script_name<> start<>
+
+<cb>/etc/rc.d/init.d/<v>script_name<> start<>
+
+Directory depends on OS (not standardized).
+
+
+
+### init.d - Service - Stop
+
+<cb>/etc/init.d/<v>script_name<> stop<>
+
+<cb>/etc/rc.d/init.d/<v>script_name<> stop<>
+
+Directory depends on OS (not standardized).
+
+
+
+### init.d - Service - Add
+
+Add Service Script to init.d Directory <^><#>1<><>:
+
+<cb>/etc/init.d/<v>service_name<><>
+
+<cb>/etc/rc.d/init.d/<v>service_name<><>
+
+Add To init.d Service:
+
+<cb>chkconfig --add <v>service_name<><>
+
+1 - Directory depends on OS (not standardized).
+
+<m>Is this right?
+See: init.d - Service Script - Create / Add (below)<>
+
+<m>What does <c>chkconfig --add <v>service_name<><> do?<>
+@
+@ chkconfig --add, TODO
+
+
+
+### init.d - Service - Run Once at Startup
+
+Add To:
+
+<cb>/etc/rc.d/rc.local/<>
+
+
+
+### init.d - Service - View
+
+<cb>chkconfig --list <v>service_name<><>
+@
+@ chkconfig --list
+
+
+
+### init.d - Services - List
+
+<cb>chkconfig --list<>
+@
+@ chkconfig --list
+
+
+
+### init.d - Server Reboot
+
+<cb>sudo init 6<>
+@
+@ init 6
+
+
+
+### init.d - Service Script - Create / Add
+
+Format:
+
+<card>Bash Script (typically)<>
+
+Location:
+
+<cb>/etc/rc.d/init.d<>
+
+Add Startup Link<^><#>1<><>:
+
+<cb>/etc/rc.d/rc2.d/S<v>99<><v>service_name<><>
+
+or
+
+<cb>/etc/rc.d/rc3.d/S<v>99<><v>service_name<><>
+
+
+Add Shutdown Link (Both Directories):
+
+<cb>/etc/rc.d/rc0.d/K<v>99<><v>service_name<><>
+
+<cb>/etc/rc.d/rc6.d/K<v>99<><v>service_name<><>
+
+
+<b>Requirements:<>
+
+<*>Must Have <c># chkconfig<> Line
+Startup Script Must Start Service with <!>NON-root<> ID
+Startup Script Must Support Actions (start, stop, restart, status)<>
+
+
+1 - File name should start with S<v>99<>. Determins startup order.
+
+1 - The directory is OS dependent.
+
+
+
+#### init.d - Service Script - chkconfig Line
+
+chkconfig Line:
+
+<cb># chkconfig: <v>run_levels<> <v>start_order<> <v>kill_order<><>
+
+Example:
+
+<cb># chkconfig: 2345 40 80<>
+
+
+
+#### init.d - Service Script - Supported Commands
+
+Usage<^><#>1<><>:
+
+<cb><v>service_name<> <v>command<><>
+
+command:
+
+<cb>start | stop | restart | status<>
+
+
+The startup script must support these 4 commands.
+
+See: sample script
+
+
+
+#### init.d - Service Script - Startup Link
+
+Create Startup Link<^><#>1<><>:
+
+<cb>.../rc2.d/S<v>99<><v>service_name<><>
+
+<cb>.../rc3.d/S<v>99<><v>service_name<><>
+
+
+Link Name Format (required):
+
+<cb>S<v>99<><v>service_name<><>
+
+<card><table><col><c>S<><><col>Start<>
+<col><c><v>99<><><><col>Start Order<>
+<col><c><v>service_name<><><><col>Must Match Original Script Name (in init.d directory)<><><>
+
+
+1 - OS Dependent
+
+
+Example:
+
+<card>sudo ln -s /etc/rc.d/init.d/service_1  /etc/rc.d/rc3.d/S91service_1<>
+
+
+
+#### init.d - Service Script - Shutdown Link
+
+Create Shutdown Link (Both Directories):
+
+<cb>.../rc0.d/K<v>99<><v>service_name<><>
+
+<cb>.../rc6.d/K<v>99<><v>service_name<><>
+
+
+Link Name Format (required):
+
+<cb>K<v>99<><v>service_name<><>
+
+<card><table><col><c>K<><><col>Start<>
+<col><c><v>99<><><><col>Kill Order<>
+<col><c><v>service_name<><><><col>Must Match Original Script Name (in init.d directory)<><><>
+
+
+Example:
+
+<card>sudo ln -s /etc/rc.d/init.d/service_1  /etc/rc.d/rc0.d/K91service_1<>
+
+
+
+### init.d - Service Script - Sample
+
+<cb>#!/bin/bash
+<#># chkconfig: 2345 20 80
+\# description: Description comes here....<>
+
+<#># Source function library.<>
+. /etc/init.d/functions
+
+start() {
+    <#># code to start app comes here 
+    # eg: daemon program_name &
+    # eg: su service_user_id -C path_to_script > path_to_log &<>
+
+}
+
+stop() {
+    <#># code to stop app comes here 
+    # eg: killproc program_name
+    # eg: killproc -p pid_file program_name
+    # eg: pkill -if 'app_regex_expression'<>
+}
+
+status() {
+    <#># code to check status of app comes here<>
+}
+
+case "<v>$1<>" in 
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    status)
+        status
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|status|restart}"
+esac
+
+exit 0<>
+
+
+### init.d - Directories
+
+<card><table><col><c>/etc/init<>		<><col>?<>
+<col> <>
+<col><c>/etc/init.d<><><col>Files to be run by init.
+Often symbolically linked to a file in the rc.d directory.
+(/etc/rc.d/init.d)<>
+<col> <>
+<col><c>/etc/rc.d<><><col>Run Commands (Startup Scripts)<>
+<col> <>
+<col><c>/etc/rc.d/init.d<><><col>Location of actual startup scripts<>
+<col> <>
+<col><c>/etc/rc.d/rcN.d<><><col>Location of run level script where N = the run level (0 - 6)
+Contains links to the actual scripts in /etc/rc.d/init.d<><><>
+
+
+
+### init.d - Files
+
+<card><table><col><c>/etc/inittab<><><col>Controls service configurations
+Change default run levels here.
+May be moved / not used.<>
+<col> <>
+<col><c>/etc/rc.local<><><col>Run once after all other scripts but before any login prompts.
+Put local setup commands in here.
+
+Often symbolically linked to a file in the rc.d directory.
+-> /ect/rc.d/rc.local<>
+<col> <>
+<col><c>/etc/init/rcS.conf<><><col>System initialization script
+Instead of /etc/inittab<>
+<col> <>
+<col><c>/etc/init/rc.conf<><><col>Individual Run Levels<>
+<col> <>
+<col><c>/etc/init.d/functions<><><col>Common init.d Functions<><><>
+
+<card><table><col><c>K<v>99script_name<><>		<><col>Kill script link. Links to the original script in init.d.
+
+K = Kill
+
+<v>99<> = Start Order
+
+<v>script_name<> is the original script name.
+
+Script links starting with K will be ordered to stop.
+
+Located in /etc/rc.d/rc<v>N<>.d directories (typically rc0.d and rc6.d)<>
+<col> <>
+<col><c>S<v>99script_name<><><><col>Start script link. Links to the original script in init.d.
+
+S = Start
+
+<v>99<> = Start Order
+
+<v>script_name<> is the original script name.
+
+Script links starting with S will be ordered to start.
+
+Located in /etc/rc.d/rc<v>N<>.d directories (typically rc2.d, rc3.d)<><><>
+
+
+<c>K<v>99script_name<><> Example:
+
+<cb>/etc/rc.d/rc0.d/K81apachewebserver<>
+
+
+<c>S<v>99script_name<><> Example:
+
+<cb>/etc/rc.d/rc3.d/S79apachewebserver<>
+
+
+
+### init.d - Run Levels
+
+These are not standardized.
+
+<card><table><col>1, 2		<><col>For System Problems<>
+<col>2<><col>Default Debian Non-GUI Mode<>
+<col>4, 5<><col>GUI / Interactive Text Modes<>
+<col>0, 6<><col>Never (used when system is starting or rebooting)<><><>
+
+
+
+### init.d - Run Levels / Redhat 6, Amazon Linux
+
+<card><table><col>0		<><col>Halt (Do NOT set the init default to this)<>
+<col>1<><col>Single User Mode<>
+<col>2<><col>Multiuser, Without NFS (same as 3 but no network)<>
+<col>3<><col>Full Multiuser Mode<>
+<col>4<><col>Unused<>
+<col>5<><col>X11<>
+<col>6<><col>Reboot (Do NOT set the init default to this)<><><>
+
+
+
+### init.d - Run Level - Start
+
+<card><table><col>Debian<><col>2<>
+<col>Redhat, Amazon Linux, Typical (?)<><col>3<><><>
+
+
+
+### init.d - Run Level - Reboot
+
+<card><table><col>0, 6		<><col>Kill scripts in <c>rc0.d<>, <c>rc6.d<><><><>
+
+
+
+### init.d - Used By
+
+<card>Amazon Linux
+Redhat<>
+@
+@ redhat, amazon linux
+
+
+
+# Services / systemd
+
+<m>How to add service to systemd?<>
+
+<m>How to start under non-root id?<>
+
+<m>How to properly capture output (log files)?<>
+
+<m>How to handle startup order?<>
+
+<m>How to restart a service?<>
+@
+@ system.d, systemd-only
+
+
+
+### systemd - Service - Start
+
+<cb>systemctl start <v>service_name<><>
+@
+@ systemctl start
+
+
+
+### systemd - Service - Stop
+
+<cb>systemctl stop <v>service_name<><>
+@
+@ systemctl stop serviceName
+
+
+
+### systemd - Service - Enable Start on Boot
+
+<cb>systemctl enable <v>service_name<><>
+@
+@ systemctl enable
+
+
+
+### systemd - Service - Check Status
+
+<cb>systemctl status <v>service_name<><>
+@
+@ systemctl status
+
+
+### systemd - Services - List All
+
+<cb>systemctl<>
+@
+@ systemctl
+
+
+
+### systemd - Services - Relead
+
+<cb>systemctl daemon-reload<>
+@
+@ systemctl daemon-reload
+
+
+
+### systemd - systemd Statuses
+
+<cb>Enabled
+Static
+Disabled<>
+
+<m>(what are these? how are they used?)<>
+@
+@ enabled, static, disabled.
+
+
+
+### systemd - Logs - Check
+
+<cb>journalctl -u <v>service_name<>.<v>service<><>
+@
+@ journalctl -u
+
+
+
+### systemd - Troublshooting - "Bad Message"
+
+Usually implies invalid syntax.
+
+
+
+### systemd - Configuration Directory / Files
+
+<cb>/etc/systemd/system<>
+
+
+
+### systemd - File - Unit File
+
+A text file that contains information for a service.
+
+Format: ini file
+
+
 
 # How To / Commands
 
 
 ### Alias
 
-<cb>alias <v>name<>=<v>command<>
+<cb>alias <v>name<>=<v>command<><>
 
 Multiple Commands:
 
@@ -262,9 +690,16 @@ Save changes.<>
 
 
 
-### Cron - Jobs - List
+### Command-line Shell - Which One?
 
-<cb>crontab -l<>
+<cb>echo $0<>
+
+Shows which command-line shell you are using.
+
+Run from the command prompt.
+Will not work inside scripts.
+@
+@ commandline, bash, zsch, sh, terminal
 
 
 
@@ -332,7 +767,7 @@ Mac Only:
 
 <cb>ditto <v>source_directory<> <v>target_directory<><>
 
-<cb>ditto will merge both directories into <c><v>target_directory<><> or create it if it does not exist.
+<cb>ditto will merge both directories into <c><v>target_directory<><> or create it if it does not exist.<>
 @
 @ cp, ditto, -r
 
@@ -340,13 +775,22 @@ Mac Only:
 
 ### Directory - Create
 
-<cb>mkdir <v>directory<>
+<cb>mkdir <v>directory<><>
 
-Create Any Missing Intermediate Directories As Needed:
+
+Creates a directory
+@
+@ mkdir, make
+
+
+
+### Directory - Create Complete With Subdirectories
 
 <cb>mkdir -p <v>directory<>/<v>directory<>/<v>directory<><>
+
+Creates all missing intermediate directories as needed.
 @
-@ mkdir -p
+@ mkdir -p, make, recursively,
 
 
 
@@ -360,7 +804,7 @@ Deletes empty directory only.
 
 
 
-### Directory - Delete - Complete
+### Directory - Delete - Non Empty
 
 Delete Directory And Contents:
 
@@ -371,6 +815,8 @@ For Directories With '-' in Name:
 <cb>rm -rf -- <v>directory<><>
 
 '--' tells bash that directory is not an option even if it starts with -.
+@
+@ completely, all
 
 
 
@@ -927,6 +1373,15 @@ tail filename 	// Display the end of a file.
 
 
 
+### File System - Get
+
+<cb>df -Th<>
+
+
+Returns the mounted systems with the file system in the 2nd column.
+
+
+
 ### Filter Results - Match Text
 
 <cb><v>...<> | grep "<v>match_text<>"<>
@@ -1357,7 +1812,7 @@ Continue in the Background:
 <cb>nohup <v>command<> &<>
 
 
-Run even if user logs out.
+Runs command even if the user logs out.
 
 
 
@@ -1447,14 +1902,6 @@ It will update and delete files as necessary.
 ### Script - Run in Current Env
 
 <cb>source <v>script_file<><>
-
-
-
-### Service - List All
-
-<cb>systemctl<l>
-
-See: Systemd - Summary (Doc)
 
 
 
@@ -1608,18 +2055,32 @@ Note: 2 - Needs to be last option.
 End of File:
 
 <cb>tail <v>file_name<><>
+@
+@ end, bottom, last
 
 
 
 ### Tail Continuously
 
 <cb>tail -f <v>file_name<><>
+@
+@ end, bottom, last
+
+
+
+### Tail - Last N Lines
+
+<cb>tail -n <v>lines<> <v>file_name<><>
+@
+@ end, bottom, last
 
 
 
 ### Tail - Latest File
 
 <cb>tail -f $(/bin/ls -1t  <v>directory/*<> | /bin/sed q)<>
+@
+@ end, bottom, last
 
 
 
@@ -1829,72 +2290,325 @@ Unzip To Target Directory:
 
 
 
-Index - Directories
+# Exit Codes
+@ 
+@ status, return
+
+
+### Exit Code - OK / Successful
+
+OK Exit Code:
+
+<cb>0<>
+@
+@ 0, successful
+
+
+### Exit Code - Error
+
+Recommended Error Exit Codes:
+
+<cb>1-127<>
+
+
+### Exit Code - Error / General Error
+
+<cb>1<>
+
+Return 1 for a general exception.
+@
+@ 1
+
+
+### Exit Code - Error / User Error
+
+<cb>2<>
+
+Invalid Command Line Options Error Code
+
+These are guideline more than rule.
+@
+@ 2
 
 
 
-### App - Global Config
-
-/etc/appName
-/usr/share/appName 	// Read Only, Independent of Machine
-/usr/lib/appName 	// Read Only, Machine Specific
-/var/lib/appName 	// Read / Write
+# Reference - System Directories
 
 
+## Directories - Basics
 
-### User - App Data / Config
+<card><table><col><c>/etc<><><col>Configuration Files<>
+<col><c>/opt<><><col>Server Application Directory<>
+<col><c>/usr<><><col>USR = Unix System Resource. Leave Alone<>
+<col><c>/usr/local<><><col>Shared Applications, 3rd Party Apps<>
+<col><c>/usr/share/zoneinfo<><><col>Server Supported Time Zones.<>
+<col><c>/var<><><col>System & System Apps Changeable Data<>
+<col><c>/var/run<><><col>Runtime Variable Data, PID files<>
+<col> <>
+<col><c>/home<><><col>Users Directory<>
+<col><c>/home/<v>user_name<><><><col>User Home Directory<>
+<col><c>~<><><col>Alias to User Home Directory<><><>
 
-/home/userName/.config/
-/home/userName/.config/appName
 
 
-### User - Home
+## Directories - Details
 
-/home/userName
-
-
-### Others
-
-~	Current User's home directory.
 /home/userName 	User home directory.
 
-/etc	Configuration files.
-/opt	Server application directory (web apps, etc.)
-/usr	USR = Unix System Resource. Used by distort packages. Leave alone.
-/usr/local	Shared applications, 3rd party apps (java, etc.). Install shared apps here.
-/usr/share/zoneinfo	Server supported time zones.
-/var	Directory where the system & system installed apps stores changeable data (web servers, etc).
-/var/run	Runtime Variable Data, PID files.
+
+### Directory - /etc
+
+<cb>/etc<>
+
+Configuration files.
 
 
 
-# Index - Config
+### Directory - /etc/init.d
 
-/etc/init.d	Directory. Contains scripts for startup daemons. (Deprecated on some systems.  See Systemd - Summary (Doc)).
-/etc/sysconfig/clock	File. The system timezone.
-/etc/systemd/system	Directory. Scripts for Systemd services (See Systemd - Summary (Doc)).
+<cb>/etc/init.d<>
 
-/etc/groups	Groups.
+Contains scripts for startup daemons.
 
-/etc/profile	Base installed systemwide initialization file. May be overwritten by OS updates.
-/etc/.profile.d	Directory. Systemwide initialization file. Use this to add items to the OS.
+(Deprecated on some systems (prefer systemd).
+@
+@ /etc/init.d, etc init.d
 
-~/.profile	(Deprecated) Bourne Shell initialization file. Executed at login time. Bash will read this if found.
-~/.bash_profile	Bash user initialization script file. Executed at login time.
-~/.bashrc	Bash user per-interactive-shell startup file. Executed by "interactive" and "non-login" shells only.
-~/.bash_logout	Bash user logout cleanup script.
-~/.inputrc	Bash user readline initialization script file.
 
-"Login" Shell Config Files	.login, .profile, .zlogin
-	Executed when logging in from another host.
-	Executed when opening a text console.
 
-"Interactive" Shell Config Files	.bashrc, .tcshrc, .zschrc...
-	Executed by shells connected to terminals or pseudo-terminals.
+### Directory - /etc/.profile.d
+Use this to add items to the OS.
+
+<m>(confirm)<>
+@
+@ /etc/.profile.d, etc .profile.d
+
+
+
+
+### Directory - /opt
+
+<cb>/opt<>
+
+Server application directory (web apps, etc.)
+
+
+
+### Directory - /usr
+
+<cb>/usr<>
+
+USR = Unix System Resource. Used by distort packages. Leave alone.
+
+
+
+### Directory - /usr/local
+
+<cb>/usr/local<>
+
+Shared applications, 3rd party apps (java, etc.). Install shared apps here.
+
+
+
+### Directory - /usr/share/zoneinfo
+
+<cb>/usr/share/zoneinfo<>
+
+Server supported time zones.
+
+
+
+### Directory - /var
+
+<cb>/var<>
+
+Directory where the system & system installed apps stores changeable data (web servers, etc).
+
+
+
+### Directory - /var/run
+
+<cb>/var/run<>
+
+Runtime Variable Data, PID files.
+
+
+
+# Reference - System Files
+
+
+### File - /etc/groups
+
+<cb>/etc/groups<>
+
+Contains all system groups.
+@
+@ etc, groups
+
+
+
+### File - /etc/profile
+
+<cb>/etc/profile<>
+
+Base installed systemwide initialization file.
+
+May be overwritten by OS updates.
+@
+@ initialization file, etc, profile
+
+
+
+### File - /etc/sysconfig/clock
+
+<cb>/etc/sysconfig/clock<>
+
+Stores the system timezone.
+@
+@ clock, timezone, sysconfig, etc
+
+
+
+# Reference - User Directories
+
+
+## User Directories - Basics
+
+<card><table><col><c>/home<><><col>Users Directory<>
+<col><c>/home/<v>user_name<><><><col>User Home Directory<>
+<col> <>
+<col><c>~<><><col>Alias to User Home Directory<><><>
+
+
+
+## User Directories - Details
+
+
+### User Directory - Home
+
+<cb>/home/<v>user_home<>
+
+
+
+# Reference - User Files
+
+
+## User Files - Basics
+
+<card><table><col><c>~/.profile<><><col>Bourne Shell Initialization Script<><col><#>(Deprecated)<><>
+<col><c>~/.bash_profile<><><col>Bash User Login Script<><col>(Login)<>
+<col><c>~/.bashrc<><><col>Bash User Per-interactive-shell Startup Script<><col>("interactive", "non-login" shells only)<>
+<col><c>~/.bash_logout<><><col>Bash User Logout Cleanup Script<>
+<col><c>~/.inputrc<><><col>Bash User Readline Initialization Script<><><>
+
+
+
+## User Files - Details
+
+
+### File - ~/.profile
+
+<cb>~/.profile<>
+
+(Deprecated) Bourne Shell initialization file.
+
+Executed at login time. Bash will read this if found.
+@
+@ .profile
+
+
+
+### File - ~/.bash_profile
+
+<cb>~/.bash_profile<>
+
+Bash user initialization script file.
+
+Executed at login time.
+@
+@ .bash_profile
+
+
+
+### File - ~/.bashrc
+
+<cb>~/.bashrc<>
+
+Bash user per-interactive-shell startup file.
+
+Executed by "interactive" and "non-login" shells only.
+@
+@ .bashrc
+
+
+
+### File - ~/.bash_logout
+
+<cb>~/.bash_logout<>
+
+Bash user logout cleanup script.
+@
+@ .bash_logout
+
+
+
+### File - ~/.inputrc
+
+<cb>~/.inputrc<>
+
+Bash user readline initialization script file.
+@
+@ .inputrc
+
+
+
+### File - "Login" Shell Config Files
+
+<cb>.login, .profile, .zlogin<>
+
+Executed when logging in from another host.
+Executed when opening a text console.
+@
+@ .login, .profile, .zlogin
+
+
+
+### File - "Interactive" Shell Config Files
+
+<cb>.bashrc, .tcshrc, .zschrc...<>
+
+Executed by shells connected to terminals or pseudo-terminals.
+@
+@ .bashrc, .tcshrc, .zschrc
+
+
+# Reference - Application Directories, Files
+
+
+### Application - Global Configuration
+
+<card><table><col><c>/etc/<v>app_name<><><>
+<col><c>/usr/share/<v>app_name<><><><col>Read Only, Independent of Machine<>
+<col><c>/usr/lib/<v>app_name<><><><col>Read Only, Machine Specific<>
+<col><c>/var/lib/<v>app_name<><><><col>Read / Write<><><>
+
+
+
+### Application - User Configuration / User Data
+
+<card><table><col><c>/home/<v>user_name<>/.config/<><>
+<col><c>/home/<v>user_name<>/.config/<v>app_name<><><><><>
 
 
 
 # Glossary
+
+
+## Acronyms
+
+
+### RC
+Run Command
 
 
 ## Terms
@@ -1908,4 +2622,22 @@ Avanced Package Tool
 A program that runs in the background.
 
 This is generally a system wide service with only one running instance. Traditionally daemon names end with the letter d. Typically the init process is the part of daemons.
+
+
+### init.d - Run Level
+An integer that states the server state/configuration/level.
+
+Run levels include Halt, Single User Mode, Multiuse Mode, Multiuse GUI Mode, Reboot. Numbers run from most simple level to most complex run mode. May be different for different flavours of Linux. Service startup/execution is tied to its run level to match the correct server state.
+
+
+### init.d - RC Script
+A script responsible for starting and stoping a service.
+
+Must be placed in /etc/init or etc/rc.d/init.d folders.
+Must take commands start, stop, restart, status.
+
+
+### Service
+An application that runs in the background waiting to be used or carries out essential tasks.
+
 
