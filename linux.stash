@@ -1047,27 +1047,35 @@ Example:
 
 ### Devices - List Mounted
 
-mount
+<cb>mount<>
+@
+@ mount
 
 
 
 ### Devices - List USB
 
-lsusb
+<cb>lsusb<>
+@
+@ lsusb
 
 
 
 ### Drives - List All
 
-diskutil list
+<cb>diskutil list<>
+@
+@ diskutil list
 
 
 
 ### Drive - Size, Free Space
 
-df -h
+<cb>df -h<>
 
-	-h	// Human Readable
+<c>-h<>		Human Readable
+@
+@ df -h
 
 
 
@@ -1078,26 +1086,36 @@ df -h
 Mount Windows Network Drive
 
 <cb>mount -t smbfs //<v>server<>/<v>drive<> /Volumes/<v>mount_name<><>
+@
+@ diskutil mount
 
 
 
 ### Drive - Unmount
 
-diskutil unmount /Volumes/mountName
+<cb>diskutil unmount /Volumes/<v>mount_name<><>
+@
+@ diskutil unmount
 
 
 
 ### Echo
 
-echo print something $Var1
+<cb>echo <v>Text to print<><>
+
+<cb>echo "<v>Your text here.<>"<>
+
+<cb>echo $<v>VARIABLE_1<><>
 
 
 
 ### Environment Variables - Show
 
-printenv
+<cb>printenv<>
 
-printenv | sort 	// printenv returns an unsorted list.
+Show Sorted:
+
+<cb>printenv | sort<>
 
 
 
@@ -1113,8 +1131,17 @@ printenv | sort 	// printenv returns an unsorted list.
 
 <cb>cat<>
 
-	cat filename 	// View the contents of a file.
-	cat > filename 	// Create a new file from the console. (Ctrl + Z to close)
+View File Contents:
+
+<cb>cat <v>file_name<><>
+
+Create File From Console:
+
+<card><c>cat > <v>file_name<><>
+
+(Ctrl + Z to close)<>
+@
+@ cat
 
 
 
@@ -1222,16 +1249,26 @@ find /path/to/base/dir -type f -exec chmod 644 {} +
 
 ### File - Link - Create
 
-<cb>ln -s sourceFilename linkFilename<>
+<cb>ln -s <v>source_path<> <v>link_name<><>
 
-	-s 	// Creates a symbol link. Can link across devices.
+<c>-s<>		Creates a symbol link. Can link across devices.
+
+
+Creates a link to the source file or directory.
+@
+@ ln -s
+@ directory, folder, new
 
 
 
 ### File - Link - Show Link Target
 
-ls -l linkFilename 	// Shows the target file of a link.
+<cb>ls -l <v>link_name<><>
 
+
+Shows the target file of a link.
+@
+@ directory, get, print
 
 
 ### File - Move
@@ -1428,25 +1465,19 @@ Mac only.
 
 
 
-### Jobs
-
-See: Process
-
-
-
 ### ls - colors - change
 
-cp /etc/DIR_COLORS ~/.dir_colors
-vi ~/.dir_colors
+<cb>cp /etc/DIR_COLORS ~/.dir_colors
+vi ~/.dir_colors<>
 
-Find	- DIR 01;34     # directory
-Change to	- DIR 01;33     # directory
+<card><table><col>Find<><col>- DIR 01;34<><col># directory<>
+<col>Change to<><col>- DIR 01;33<><col># directory<><><>
 
 
 
 ### ls - colors - view
 
-<cb>eval $(echo "no:global default;fi:normal file;di:directory;ln:symbolic link;pi:named pipe;so:socket;do:door;bd:block 	device;cd:character device;or:orphan symlink;mi:missing file;su:set uid;sg:set gid;tw:sticky other writable;ow:other 	writable;st:sticky;ex:executable;"|sed -e 's/:/="/g; s/\;/"\n/g')
+<cb>eval $(echo "no:global default;fi:normal file;di:directory;ln:symbolic link;pi:named pipe;so:socket;do:door;bd:block device;cd:character device;or:orphan symlink;mi:missing file;su:set uid;sg:set gid;tw:sticky other writable;ow:other writable;st:sticky;ex:executable;"|sed -e 's/:/="/g; s/\;/"\n/g')
 {
 	IFS=:
 		for i in $LS_COLORS
@@ -1461,15 +1492,15 @@ Change to	- DIR 01;33     # directory
 
 <cb>pmap -d <v>PID<><>
 
-Mapped:				total amount of memory mapped to files.
-Writeable/Private	amount of private address space.
-Shared:				amount of address space the process is sharing with others.
+<table><col>Mapped:<><col>total amount of memory mapped to files.<>
+<col>Writeable/Private<><col>amount of private address space.<>
+<col>Shared:<><col>amount of address space the process is sharing with others.<><>
 
 
 
 ### Memory - System - Total
 
-grep MemTotal /proc/meminfo | awk '{print $2}'
+<cb>grep MemTotal /proc/meminfo | awk '{print $2}'<>
 
 
 
@@ -1612,12 +1643,12 @@ Linux:
 
 ### Print - Formatted
 
-printf 'line to be printed %s %-20s ... \n' string1 string2...
+<cb>printf '<v>line to be printed<> %s %-20s <v>... \n<>' <v>string1<> <v>string2<><v>...<><>
 
-	%s	// Print string.
-	%10s	// Print 10 chars long, pad with spaces, right align.
-	%-10s	// Print 10 chars long, pad with spaces, left align.
-	/n	// New line. By default = no new line.
+<table><col><c>%s<>		<><col>Print string.<>
+<col><c>%10s<><><col>Print 10 chars long, pad with spaces, right align.<>
+<col><c>%-10s<><><col>Print 10 chars long, pad with spaces, left align.<>
+<col><c>/n<><><col>New line. By default = no new line.<><>
 
 
 
@@ -1669,8 +1700,9 @@ Using Regular Expression:
 <cb>pgrep -if '<v>regex expression<>'<>
 
 
-	<c>-f<>			Match against full argument list, instead of just name.
-	<c>-i<>			Ignore Case
+<table><col><c>-f<>	<><col>Match against full argument list, instead of just name.<>
+<col><c>-i<><><col>Ignore Case<><>
+
 
 Example:
 
@@ -1907,7 +1939,7 @@ It will update and delete files as necessary.
 
 ### Sleep
 
-<cb>sleep <v>seconds<><l>
+<cb>sleep <v>seconds<><>
 
 
 
@@ -2246,13 +2278,13 @@ dscacheutil -q group 		// OS X Specific.
 
 ### Version - Find
 
-// One of the following...
+One of the following:
 
-cat /etc/*-release
+<cb>cat /etc/*-release
 
 lsb_release
 
-cat /proc/version
+cat /proc/version<>
 
 
 
@@ -2264,11 +2296,13 @@ wget http://url-to-file 	// Will download the web url to the current directory.
 
 ### Zip - Compress
 
-zip -r zipFile folderToCompress
-zip -r zipFile file1 file2 ...
-zip -r zipFile files -x filesToExclude
+<cb>zip -r <v>zip_file<> <v>folder_to_compress<>
+zip -r <v>zip_file<> <v>file1<> <v>file2<> <v>...<>
+zip -r <v>zip_file<> <v>files<> -x <v>files_to_exclude<><>
 
-		-P password
+Options:
+
+<cb>-P <v>password<><>
 
 
 
@@ -2361,6 +2395,8 @@ These are guideline more than rule.
 <cb>/etc<>
 
 Configuration files.
+
+(Pronounced: Et See)
 
 
 
