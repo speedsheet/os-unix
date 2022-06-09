@@ -281,7 +281,7 @@ Startup Script Must Support Actions (start, stop, restart, status)<>
 
 
 
-#### init.d - Service Script - chkconfig Line
+### init.d - Service Script - chkconfig Line
 
 chkconfig Line:
 
@@ -293,7 +293,7 @@ Example:
 
 
 
-#### init.d - Service Script - Supported Commands
+### init.d - Service Script - Supported Commands
 
 Usage<^><#>1<><>:
 
@@ -310,7 +310,7 @@ See: sample script
 
 
 
-#### init.d - Service Script - Startup Link
+### init.d - Service Script - Startup Link
 
 Create Startup Link<^><#>1<><>:
 
@@ -337,7 +337,7 @@ Example:
 
 
 
-#### init.d - Service Script - Shutdown Link
+### init.d - Service Script - Shutdown Link
 
 Create Shutdown Link (Both Directories):
 
@@ -767,7 +767,7 @@ Mac Only:
 
 <cb>ditto <v>source_directory<> <v>target_directory<><>
 
-<cb>ditto will merge both directories into <c><v>target_directory<><> or create it if it does not exist.<>
+<c>ditto<> will merge both directories into <c><v>target_directory<><> or create it if it does not exist.
 @
 @ cp, ditto, -r
 
@@ -1488,6 +1488,16 @@ vi ~/.dir_colors<>
 
 
 
+### Memory - All Information
+
+<cb>cat /proc/meminfo<>
+
+Lists all memory and how it is allocated.
+@
+@ swap file, cached
+
+
+
 ### Memory - Process - Used
 
 <cb>pmap -d <v>PID<><>
@@ -1654,24 +1664,31 @@ Linux:
 
 ### Process - Find By Name
 
-<cb>pgrep <v>app_name<><>
-
-Linux:
-
-<cb>pgrep -af '<v>regex_expression<>'<>
-
-MacOS:
+<cb>pgrep <v>process_name<><>
 
 <cb>pgrep -if '<v>regex_expression<>'<>
 
-	-f		Match against full argument list (defaults to process name only).
-	-i		Ignore case.
+Searches for <c><v>process_name<>.
 
-or (less optimal):
+
+<in><table><col>-a<><col>List Full Command Line (Linux)<>
+<col><><col>Include Process Ancestors (Mac)<>
+<col>-f<><col>Match Against Full Argument List (defaults to process name only)<>
+<col>-i<><col>Ignore Case<>
+<col>-l<><col>Long Output (lists name)<><><>
+@
+@ pgrep, -i, -f, -l
+@ regex, regular expressions
+
+
+
+### Process - Find By Name / Using Grep
 
 <cb>ps -e | grep [<v>p<>]<v>rocess_name<><>
 
 Searches for <c><v>process_name<>.
+
+
 <c><v>process_name<> should be written <c>[<v>p<>]<v>rocess_name<><>. Eliminates the grep command from the results.
 
 Example:
@@ -1679,6 +1696,9 @@ Example:
 Show All Java Processes:
 
 <cb>ps -ef | grep [<v>j<>]<v>ava<><>
+@
+@ ps, -e, -f
+@ regex, regular expressions
 
 
 
@@ -1714,9 +1734,13 @@ Example:
 
 <cb>kill <v>process_id<><>
 
-Force Kill:
+
+
+### Process - Kill - Force
 
 <v>kill -9 <v>process_id<><>
+@
+@ -9
 
 
 
@@ -1730,13 +1754,14 @@ Using Regular Expression:
 
 	-f	// Match against full argument list, instead of just name.
 	-i	// Ignore Case
+@
+@ pkill, -f, -i
 
 
 
 ### Process - Job - In Fg. - Suspend
 
 <cb>ctrl + z<>
-
 
 Suspends foreground job.
 
@@ -1745,64 +1770,92 @@ Suspends foreground job.
 ### Process - Job - Kill
 
 <cb>kill %job_id<>
+@
+@ kill
 
 
 
 ### Process - Job - Restart
 
 <cb>bg %job_id 	// Will restart a suspended job.<>
+@
+@ bg
 
 
 
 ### Process - Job - Suspend
 
 <cb>kill -STOP %job_id<>
+@
+@ kill -stop
 
 
 
 ### Process - Job - To Background
 
 <cb>bg %job_id<>
+@
+@ bg
 
 
 
 ### Process - Job - To Foreground
 
 <cb>fg %job_id<>
+@
+@ fg
 
 
 
 ### Process - Jobs - List
 
-jobs
-jobs -l	// List Process Id
+<cb>jobs<>
 
+List With Process ID:
+
+<cb>jobs -l<>
+@
+@ -l
 
 
 ### Process - List
 
-ps
+<cb>ps<>
 
-	-e 	// List Every process.
-	-f 	// Full format. Lists lots of items.
-	-p id 	// Show for process id.
-	-o field1,field2,... 	// Display process fields
-	-u username 	// List jobs for that user only.
+Show running processes.
 
-ex:
-	ps -ef | grep [a]ppName 			// Shows all programs matching appName.
-	ps -o ruser,pid,vsz,s,uid,comm -p id 	// Shows User Id, PID, State Command, etc.
-	ps -e -o ruser,pid,s,vsz,stime,time,comm
+Options:
 
-pgrep	pgrep -if 'appName'
-	pgrep -lf 'regexExpression'
+<in><table><col><c>-e<> <><col>List Every process.<>
+<col><c>-f<> <><col>Full format. Lists lots of items.<>
+<col><c>-p <v>id<><> <><col>Show for process id.<>
+<col><c>-o <v>field1<>,<v>field2<>,<v>...<><> <><col>Display process fields<>
+<col><c>-u <v>username<><> <><col>List jobs for that user only.<><><>
 
-		-f					// Match against full argument list.
-		-i					// Ignore Case. Not always supported (aws linux).
-		-l					// Long Format
+Fields:
 
-	ex:
-		pgrep -lf 'java .*Cassandra'
+<in><table><col>comm<><col>Command<>
+<col>ruser<><col>User Name<>
+<col>pid<><col>Process ID<>
+<col>s<><col>Process State<>
+<col>time<><col>CPU Time (cumulative)<>
+<col>uid<><col>User ID<>
+<col>vsz<><col>Virtual Memory Size<><><>
+
+
+Examples:
+
+Shows all programs matching <c><v>app_name<><>:
+
+<cb>ps -ef | grep [<v>a<>]<v>pp_name<><>
+
+Match ID, Show User Id, PID, State Command, etc:
+
+<cb>ps -o ruser,pid,vsz,s,uid,comm -p <v>id<><>
+
+Show all processes. Show user, process id, process state, start time, execute time, command:
+
+<cb>ps -e -o ruser,pid,s,vsz,stime,time,comm<>
 
 
 
@@ -1811,6 +1864,26 @@ pgrep	pgrep -if 'appName'
 <cb>top<>
 
 Lists top working apps.
+
+
+
+### Process - List - Match By Name
+
+<cb>pgrep -if '<v>app_name<>'<>
+
+<cb>pgrep -lf '<v>regexExpression<>'<>
+
+
+Options:
+
+<in><table><col><c>-f<><><col>Match against full argument list.<>
+<col><c>-i<><><col>Ignore Case. Not always supported (aws linux).<>
+<col><c>-l<><><col>Long Format<><><>
+
+
+Example:
+
+<cb>pgrep -lf '<v>java .*Cassandra<>'<>
 
 
 
@@ -1832,27 +1905,37 @@ Continue in the Background:
 
 
 
-
-### Process - Run In Background
+### Process - Start In Background
 
 <cb><v>command &<>
 
+Runs the command in the background.
+@
+@ run, &
 
 
-### Process - Run In Background
+
+### Process - Start In Background / Continue After Logout
 
 <cb>nohup <v>command<> &<>
 
+Runs the command in the background.
 
-Runs command even if the user logs out.
+Continues to run the command even if the user logs out.
+@
+@ run, nohup, &
 
 
 
 ### Processes - CPU, Memory, Stats
 
-ps -eo pid,cpu%,mem%,vsize,start,args | sort -k 4 -nr | head -25'
+<cb>ps -eo pid,cpu%,mem%,vsize,start,args | sort -k 4 -nr | head -25'<>
 
-Top 25 By CPU	ps -eo pid,%cpu,%mem,vsize,start,args | sort -k 2 -nr | head -25
+
+
+### Processes - Top 25 By CPU
+
+<cb>ps -eo pid,%cpu,%mem,vsize,start,args | sort -k 2 -nr | head -25<>
 
 
 
@@ -2069,16 +2152,27 @@ IO information, cpu usage for a given length of time.
 
 ### Tar - Untar
 
-<cb>tar xzf <v>file_name<><>
+<cb>tar xzf <v>file_name<>
 
-	f	Use filename as input.  2
-	x	Extract. 1
-	v	Verbose.
-	z	Extract through gZip. 1
-	-C <v>target_directory<> 	Expand to <c>target_directory<>.
+tar xzf <v>file_name<> -C <v>target_directory<><>
 
-Note: 1 - Needs to be first option. Does not need '-'.
-Note: 2 - Needs to be last option.
+Extracts the contents of a tar file into a new directory.
+
+The default directory has the same name as the file without the extension.
+
+
+Options:
+
+<card><table><col><c>f<><><col>Use filename as input<#><super>1<><>.<>
+<col><c>v<><><col>Verbose.<>
+<col><c>x<><><col>Extract<#><super>2<><>.<>
+<col><c>z<><><col>Extract through gZip. 1<>
+<col><c>-C <v>target_directory<><><><col>Expand to <c>target_directory<>.<><><>
+
+1 - Needs to be last option.
+2 - Needs to be first option. Does not need a leading dash ('-').
+@
+@ tar, gzip, .gz, .tar
 
 
 
@@ -2288,9 +2382,13 @@ cat /proc/version<>
 
 
 
-### Web - Download
+### Web - Download / wget
 
-wget http://url-to-file 	// Will download the web url to the current directory.
+<cb>wget <v>http://site.com/page<><>
+
+Will download the web page or web file to the current directory.
+@
+@ wget, url, link, web page, file
 
 
 
@@ -2371,8 +2469,12 @@ These are guideline more than rule.
 
 ## Directories - Basics
 
-<card><table><col><c>/etc<><><col>Configuration Files<>
+<card><table><col><c>/dev<><><col>Devices<>
+<col><c>/etc<><><col>Configuration Files<>
+<col><c>/home<><><col>Users Directory<>
 <col><c>/opt<><><col>Server Application Directory<>
+<col><c>/proc<><><col>System Processes<>
+<col><c>/sys<><><col>Kernel Information<>
 <col><c>/usr<><><col>USR = Unix System Resource. Leave Alone<>
 <col><c>/usr/local<><><col>Shared Applications, 3rd Party Apps<>
 <col><c>/usr/share/zoneinfo<><><col>Server Supported Time Zones.<>
@@ -2388,6 +2490,17 @@ These are guideline more than rule.
 ## Directories - Details
 
 /home/userName 	User home directory.
+
+
+
+### Directory - /dev
+
+<cb>/dev<>
+
+Devices.
+
+All devices are accessible from the file system and mounted under this directory.
+
 
 
 ### Directory - /etc
@@ -2421,12 +2534,49 @@ Use this to add items to the OS.
 
 
 
+### Directory - /etc/ssh
+
+<cb>/etc/ssh<>
+
+Stores ssh configuration information.
+
+Contains public and private keys.
+@
+@ public private keys
+
+
+
+### Directory - /home
+
+<cb>/home<>
+
+User data directory.
+
+Each user has a subdirectory dedicated to them under <c>/home<>.
+
+
 
 ### Directory - /opt
 
 <cb>/opt<>
 
-Server application directory (web apps, etc.)
+Server application directory (web apps, etc.).
+
+
+
+### Directory - /proc
+
+<cb>/proc<>
+
+Provides information on running processes.
+
+
+
+### Directory - /sys
+
+<cb>/sys<>
+
+Provides information on the kernel.
 
 
 
@@ -2458,7 +2608,17 @@ Server supported time zones.
 
 <cb>/var<>
 
+Variable Data
+
 Directory where the system & system installed apps stores changeable data (web servers, etc).
+
+
+
+### Directory - /var/apt
+
+<cb>/var/apt<>
+
+Logs for all items installed or updated on the system.
 
 
 
@@ -2473,13 +2633,45 @@ Runtime Variable Data, PID files.
 # Reference - System Files
 
 
+### File - /etc/hostname
+
+<cb>/etc/hostname<>
+
+The computer name.
+@
+@ computer name
+
+
+
 ### File - /etc/groups
 
 <cb>/etc/groups<>
 
 Contains all system groups.
 @
-@ etc, groups
+@ etc, user groups
+
+
+
+### File - /etc/machine-id
+
+<cb>/etc/machine-id<>
+
+The computer id.
+@
+@ computer id
+
+
+
+### File - /etc/passwd
+
+<cb>/etc/passwd<>
+
+Stores all system and user ids.
+
+Includes user name, user id, startup directory.
+@
+@ system ids, user id, users
 
 
 
@@ -2502,6 +2694,22 @@ May be overwritten by OS updates.
 Stores the system timezone.
 @
 @ clock, timezone, sysconfig, etc
+
+
+
+### File - /proc/cpuinfo
+
+<cb>/proc/cpuinfo<>
+
+Shows all cpu information.
+
+
+
+### File - /proc/meminfo
+
+<cb>/proc/meminfo<>
+
+Shows all memory information.
 
 
 
