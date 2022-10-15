@@ -820,6 +820,19 @@ For Directories With '-' in Name:
 
 
 
+### Directory - File Count
+
+<cb>ls | wc -l
+
+ls <v>path<> | wc -l<>
+
+
+Returns the number of files in a directory.
+@
+@ ls, wc -l
+
+
+
 ### Directory - List
 
 <cb>ls<>
@@ -939,7 +952,7 @@ Lists by last modified time.
 
 <cb>ls -R <v>...<><>
 @
-@ Files, ls, With, Plus, Include
+@ Files, ls, With, Plus, Include, recursively
 
 
 
@@ -991,18 +1004,33 @@ See: Rsync (below)
 <cb>dirname <v>directory_1<><>
 
 Returns the parent directory of a directory.
+@
+@ dirname
 
 
 
 
-### Directory  - Show Current
+### Directory - Show Current
 
 <cb>pwd<>
 
 Print Working Directory.
 @
-@ Get
+@ Get, pwd
 
+
+
+### Directory - Show Size
+
+<cb>du -sh <v>directory<><>
+
+For Current Directory:
+
+<cb>du -sh .<>
+
+Returns the size of the directory.
+@
+@ get -sh, du
 
 
 
@@ -1020,14 +1048,16 @@ Shows files that are different.
 Extra - Filtered View:
 
 <cb>diff <v>...<> | grep -v '\:\s\._' > <v>output_file<><>
+@
+@ diff - rq
 
 
 
 ### Directories - List Sizes
 
-<v>du<>
+<cb>du<>
 
-<v>du -h <v>directory_1<><>
+<cb>du -h <v>directory_1<><>
 
 	<c>-h<>		Lists summary info.
 	<c>-k<>		List sizes in Kilobytes.
@@ -1041,7 +1071,7 @@ Example:
 
 <cb>du -k | sort -rn | head<>	
 @
-@ Get
+@ Get, du
 
 
 
@@ -1165,8 +1195,11 @@ Create File From Console:
 
 <cb>touch -a -m -t <v>YYYYMMDDhhmm.ss<> <v>file_name<><>
 
+<cb>touch -a -m -d <v>YYYY<>-<v>MM<>-<v>DD<>T<v>hh<>-<v>mm<>-<v>ss<> <v>file_name<><>
+
 	-a		accessed date
 	-m		modified date
+	-d		date
 	-t		timestamp
 
 				<c><v>YYYYMMDDhhmm.ss<><>
@@ -1174,6 +1207,8 @@ Create File From Console:
 				<c><v>MMDDhhmm<><>
 @
 @ timestamp, datetime, date time, update
+@ yyyy-mm-dd, hh-mm-ss, yyyymmdd, hhmmss
+
 
 
 ### File - Delete
@@ -1738,7 +1773,7 @@ Example:
 
 ### Process - Kill - Force
 
-<v>kill -9 <v>process_id<><>
+<cb>kill -9 <v>process_id<><>
 @
 @ -9
 
@@ -2853,6 +2888,27 @@ Executed by shells connected to terminals or pseudo-terminals.
 
 ### RC
 Run Command
+
+
+### SCP
+Secure Copy Protocol
+
+
+### SH
+Shell
+
+
+### SSH
+Secure Shell
+
+
+### SSL
+Secure Socket Layer
+
+
+### TSL
+Transport Layer Security
+
 
 
 ## Terms
